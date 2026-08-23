@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {                  // e.g. Pranav
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  name     String?
+}
+
+model Exercise {                // e.g. "Barbell Chest Press"
+  id           Int              @id @default(autoincrement())
+  name         String           @unique
+  muscleGroup  String?          // e.g. "Chest"
+}
