@@ -13,8 +13,39 @@ model User {                  // e.g. Pranav
   name     String?
 }
 
+enum  MuscleRole{
+  PRIMARY
+  SECONDARY
+  TERTIARY
+}
+
 model Exercise {                // e.g. "Barbell Chest Press"
   id           Int              @id @default(autoincrement())
   name         String           @unique
-  muscleGroup  String?          // e.g. "Chest"
+  instructions String?
+  imageUrl     String?  
+  videoUrl     String?  
+
+  muscles      ExerciseMuscle[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([name])
+}
+
+model Muscle {
+  id            Int             @id @default(autoincrement())
+  name          String          @unique
+  exercises     ExerciseMuscle[]
+}
+
+model ExerciseMuscle {
+  exerciseId    Int
+  muscleId      Int 
+  role          MuscleRole
+  exercise      Exercise  @relation(fields:[exerciseId],references:id, onDelete: Cascade)
+  muscle        Muscle    @relation(fields:[muscleId],references:id,onDelete:Cascade)
+
+  @@id([exerciseId, muscleId])
+  @@index([muscleId])  
 }

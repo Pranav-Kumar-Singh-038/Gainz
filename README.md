@@ -103,3 +103,7 @@ Responses use a consistent envelope format:
 
 - **Vite proxy:** The client proxies all `/api/*` requests to `http://localhost:3000` during development (see `client/vite.config.ts`), so no CORS configuration is needed.
 - **Prisma client is gitignored:** `server/generated/prisma/` must be regenerated with `npx prisma generate` after cloning or whenever `schema.prisma` changes. Schema changes should also get a migration via `npx prisma migrate dev --name <change_name>`.
+
+## Credits
+
+- **Exercise data:** The seeded exercise catalog (`server/prisma/data/exercises.json`, 800+ exercises) comes from [free-exercise-db](https://github.com/yuhonas/free-exercise-db) by [yuhonas](https://github.com/yuhonas), released under [The Unlicense](https://github.com/yuhonas/free-exercise-db/blob/main/LICENSE) (public domain). Exercise images are served from the same repository.

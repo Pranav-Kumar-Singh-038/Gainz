@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react';
 
 type Exercise = {
   id: number,
-  name: String,
-  muscleGroup: String
+  name: string,
+  instructions: string | null,
+  imageUrl: string | null,
+  videoUrl: string | null,
 }
 function App() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/get-exercises").then((res) => {
+    fetch("/api/exercises").then((res) => {
       if (!res.ok) {
         throw new Error(`Failed: ${res.status}`);
       }
@@ -28,7 +30,8 @@ function App() {
       <ul>
         {exercises.map((exercise) => (
           <li key={exercise.id}>
-            {exercise.name} - {exercise.muscleGroup ?? "N/A"}
+            {exercise.name} - {exercise.instructions ?? "N/A"}
+            {exercise.imageUrl && <img src={exercise.imageUrl} alt={exercise.name} />}
           </li>
         ))}
       </ul>
