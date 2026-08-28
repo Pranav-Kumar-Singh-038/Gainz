@@ -1,41 +1,33 @@
-import { useEffect, useState } from 'react';
-
-type Exercise = {
-  id: number,
-  name: string,
-  instructions: string | null,
-  imageUrl: string | null,
-  videoUrl: string | null,
-}
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Exercises from './pages/Exercises'
+import Signup from './pages/Signup'
+import Dashboard from './pages/Dashboard'
+import Login from './pages/Login';
 function App() {
-  const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [loggedIn, setLoggedIn] = useState<boolean>(
+    localStorage.getItem("userId") !== null
+  );
 
-  useEffect(() => {
-    fetch("/api/exercises").then((res) => {
-      if (!res.ok) {
-        throw new Error(`Failed: ${res.status}`);
-      }
-      return res.json();
-    }).then((json: { message: string, data: Exercise[] }) => {
-      setExercises(json.data);
-    }).catch((err) => setError(err.message));
-  }, []);
-
-  if (error) {
-    return <p>{error}</p>
-  }
   return (
-    <>
-      <ul>
-        {exercises.map((exercise) => (
-          <li key={exercise.id}>
-            {exercise.name} - {exercise.instructions ?? "N/A"}
-            {exercise.imageUrl && <img src={exercise.imageUrl} alt={exercise.name} />}
-          </li>
-        ))}
-      </ul>
-    </>
+    <BrowserRouter>
+      <Routes>
+        {loggedIn ?
+          (<Route path="/" element={<Dashboard />} />) :
+          (
+            <>
+              <Route path="/signup" element={<Signup />} />
+              <Route
+                path="/"
+                element={<Navigate to="/signup" replace />}
+              />
+            </>
+          )}
+
+        <Route path="/login" element={<Login setLoggedIn={setLoggedIn}/>} />
+        <Route path="/exercises" element={<Exercises />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
