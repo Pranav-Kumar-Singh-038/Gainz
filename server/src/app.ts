@@ -43,7 +43,15 @@ app.post('/api/add-exercise', async (req: Request, res: Response) => {
 
 app.get('/api/exercises', async (req: Request, res: Response) => {
   try {
-    const exercises = await prisma.exercise.findMany();
+    const searchTerm =typeof req.query.searchTerm === 'string' ? req.query.searchTerm :undefined;
+    const exercises = await prisma.exercise.findMany({
+      where:searchTerm ? {
+        name:{
+          contains:searchTerm,
+          mode: 'insensitive'
+        }
+      }:undefined
+    });
     return res.status(200).json({ message: "Exercises Fetched!", data: exercises });
   }
   catch (err) {
@@ -88,7 +96,7 @@ app.post('/api/signup', async (req: Request, res: Response) => {
     return res.status(200).json({ message: "User Created Successfully", data: userAuth })
   }
   catch (err) {
-     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code == "P2002") {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code == "P2002") {
       return res.status(409).json({ message: "User Already Exists" });
     }
     return res.status(500).json({ message: "User Signup Failed!", error: err })
@@ -112,5 +120,75 @@ app.post('/api/login', async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Login Unsuccessful", error: err })
   }
 })
+
+app.post('/api/add-workout', async (req: Request, res: Response) => {
+  try {
+    const { name, userId } = req.body;
+    const workoutData = await prisma.workout.create({
+      data: {
+        name: name,
+        userId: Number(userId)
+      }
+    });
+    return res.status(200).json({ message: "Workout Added Successfully", data: workoutData })
+  }
+  catch (err) {
+    console.error(err);
+
+    return res.status(500).json({ message: "Failed To Add Workout", error: err })
+  }
+})
+
+app.get('/api/workouts', async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.query.userId);
+    const workouts = await prisma.workout.findMany({
+      where: { userId }
+    });
+    return res.status(200).json({ message: "Workouts Fetched!", data: workouts });
+  }
+  catch (err) {
+    return res.status(500).json({ message: "Failed To Fetch Workouts!", error: err });
+  }
+})
+
+app.post('/api/workout/add-exercise', async (req: Request, res: Response) => {
+  try {
+    const { workoutId, exerciseId, sets, reps, rest } = req.body;
+    const exerciseData = await prisma.workoutExercise.create({
+      data: {
+        workoutId,
+        exerciseId: Number(exerciseId),
+        sets: sets ?? 3,
+        reps: reps ?? 12,
+        rest: rest ?? 120
+      }
+    });
+    return res.status(200).json({ message: "Exercise Added Successfully", data: exerciseData })
+  }
+  catch (err) {
+    console.error(err);
+
+    return res.status(500).json({ message: "Failed To Add Exercise", error: err })
+  }
+})
+
+app.get('/api/workout/exercises', async (req: Request, res: Response) => {
+  try {
+    const workoutId = Number(req.query.workoutId);
+    const exercises = await prisma.workoutExercise.findMany({
+      where: { workoutId },
+      include: {
+        exercise: true
+      }
+    });
+    return res.status(200).json({ message: "Exercises Fetched!", data: exercises });
+  }
+  catch (err) {
+    return res.status(500).json({ message: "Failed To Fetch Exercises!", error: err });
+  }
+})
+
+
 
 app.listen(3000);

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 
-type Exercise = {
+export type Exercise = {
     id: number,
     name: string,
     instructions: string | null,
     imageUrl: string | null,
     videoUrl: string | null,
 }
+
 function Exercises() {
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [error, setError] = useState<string | null>(null);

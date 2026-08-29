@@ -8,9 +8,10 @@ datasource db {
 }
 
 model User {                  // e.g. Pranav
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  password String    
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  password        String    
+  workouts        Workout[]
 }
 
 enum  MuscleRole{
@@ -27,6 +28,7 @@ model Exercise {                // e.g. "Barbell Chest Press"
   videoUrl     String?  
 
   muscles      ExerciseMuscle[]
+  workout      WorkoutExercise[]
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
@@ -48,4 +50,32 @@ model ExerciseMuscle {
 
   @@id([exerciseId, muscleId])
   @@index([muscleId])  
+}
+
+model Workout {
+  id           Int              @id @default(autoincrement())
+  name         String
+  userId       Int            
+  user         User             @relation(fields:[userId], references:[id], onDelete:Cascade)
+
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  exercises    WorkoutExercise[]
+
+  @@index([userId])
+}
+
+model WorkoutExercise{
+  workoutId    Int
+  exerciseId   Int
+
+  exercise     Exercise          @relation(fields:[exerciseId], references:[id],onDelete:Cascade)
+  workout      Workout           @relation(fields:[workoutId], references:[id], onDelete:Cascade)
+
+  sets         Int               @default(3)
+  reps         Int               @default(12)
+  rest         Int               @default(120)
+
+  @@id([workoutId,exerciseId])
 }
