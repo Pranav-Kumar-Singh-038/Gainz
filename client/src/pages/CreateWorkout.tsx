@@ -14,6 +14,25 @@ function CreateWorkout() {
     const [userWorkouts, setUserWorkouts] = useState<Workout[]>([]);
     const navigate = useNavigate();
 
+    async function deleteWorkout(workoutId: number) {
+        try {
+            const response = await fetch('/api/remove-workout', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ workoutId: workoutId })
+            })
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed To Delete Workout");
+            }
+            setUserWorkouts(userWorkouts.filter(e =>!(e.id === Number(workoutId))))
+            alert(`Workout Removed SuccessFully`)
+        }
+        catch (err) {
+            alert(`${err}`);
+        }
+    }
+
     function navigateModifyWorkout(workout: Workout) {
         navigate(`/workout/${workout.id}/exercises`, { state: { workout } });
     }
@@ -36,7 +55,7 @@ function CreateWorkout() {
                 setUserWorkouts(workouts);
             }
             catch (err) {
-                console.log(JSON.stringify(err));
+                // console.log(JSON.stringify(err));
                 alert(`${err}`);
             }
         }
@@ -78,6 +97,7 @@ function CreateWorkout() {
                 {userWorkouts.map((workout) => (
                     <li key={workout.id}>
                         {workout.name}<button onClick={() => { navigateModifyWorkout(workout) }}>Modify Workout</button>
+                        <button onClick={() => { deleteWorkout(workout.id) }}>Delete Workout</button>
                     </li>
                 ))}
             </ul>

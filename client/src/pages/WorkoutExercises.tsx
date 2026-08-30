@@ -12,12 +12,69 @@ type WorkoutExercise =
         exercise: Exercise
     }
 function WorkoutExercises() {
+    const [sets, setSets] = useState<number>(0);
+    const [reps, setReps] = useState<number>(0);
+    const [rest, setRest] = useState<number>(0);
     const [exercises, setExercises] = useState<WorkoutExercise[]>([]);
     const [searchTerm, setSearchTerm] = useState<String>('');
     const [resultExercises, setResultExercises] = useState<Exercise[]>([]);
     const { workoutId } = useParams<{ workoutId: string }>();
     const location = useLocation();
     const workout = location.state?.workout as Workout;
+
+    async function removeExerciseFromWorkout(exerciseId: number | string) {
+        try {
+            const workoutIdNumber = Number(workoutId);
+            const response = await fetch('/api/workout/remove-exercise', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    workoutId: workoutIdNumber,
+                    exerciseId: exerciseId,
+                })
+            })
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to Remove Workout")
+            }
+            setExercises(exercises.filter(e =>
+                !(e.workoutId === Number(workoutId) && e.exerciseId === exerciseId)
+            ))            
+            alert(`Exercise Removed SuccessFully`)
+        }
+        catch (err) {
+            alert(`${err}`);
+        }
+    }
+
+    async function addExerciseToWorkout(exerciseId: number | string) {
+        try {
+            const workoutIdNumber = Number(workoutId);
+            const response = await fetch('/api/workout/add-exercise', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    workoutId: workoutIdNumber,
+                    exerciseId: exerciseId,
+                    sets: sets,
+                    reps: reps,
+                    rest: rest
+                })
+            })
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to add Workout")
+            }
+            const responseData = await response.json();
+            const exerciseData = responseData.data;
+            setExercises([...exercises, exerciseData])
+            // console.log(JSON.stringify(resultExercises));
+            alert(`Exercise Added SuccessFully`)
+        }
+        catch (err) {
+            alert(`${err}`);
+        }
+    }
 
     useEffect(() => {
         async function getExercises() {
@@ -66,7 +123,8 @@ function WorkoutExercises() {
             <ul>
                 {exercises.map((e) => (
                     <li key={e.exercise.id}>
-                        {e.exercise.name}
+                        <p>Name - {e.exercise.name}, Sets - {e.sets}, Reps - {e.reps}, Rest Time - {e.rest}s</p>
+                        <button onClick={() => removeExerciseFromWorkout(e.exercise.id)}>Remove Exercise</button>
                     </li>
                 ))}
 
@@ -80,6 +138,11 @@ function WorkoutExercises() {
                     <li key={exercise.id}>
                         {exercise.name} - {exercise.instructions ?? "N/A"}
                         {exercise.imageUrl && <img src={exercise.imageUrl} alt={exercise.name} />}
+                        {<input placeholder="Sets" onChange={(e) => { setSets(parseInt(e.target.value, 10)) }}></input>}
+                        {<input placeholder="Reps" onChange={(e) => { setReps(parseInt(e.target.value, 10)) }}></input>}
+                        {<input placeholder="Rest Time (in seconds)" onChange={(e) => { setRest(parseInt(e.target.value, 10)) }}></input>}
+                        {<button onClick={() => addExerciseToWorkout(exercise.id)}>Add Exercise</button>}
+
                     </li>
                 ))}
             </ul>

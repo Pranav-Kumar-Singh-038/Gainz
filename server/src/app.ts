@@ -139,6 +139,23 @@ app.post('/api/add-workout', async (req: Request, res: Response) => {
   }
 })
 
+app.post('/api/remove-workout', async (req: Request, res: Response) => {
+  try {
+    const { workoutId } = req.body;
+    const workoutData = await prisma.workout.delete({
+      where: {
+        id:workoutId
+      }
+    });
+    return res.status(200).json({ message: "Workout Removed Successfully", data: workoutData })
+  }
+  catch (err) {
+    console.error(err);
+
+    return res.status(500).json({ message: "Failed To Delete Workout", error: err })
+  }
+})
+
 app.get('/api/workouts', async (req: Request, res: Response) => {
   try {
     const userId = Number(req.query.userId);
@@ -162,6 +179,9 @@ app.post('/api/workout/add-exercise', async (req: Request, res: Response) => {
         sets: sets ?? 3,
         reps: reps ?? 12,
         rest: rest ?? 120
+      },
+      include:{
+        exercise:true
       }
     });
     return res.status(200).json({ message: "Exercise Added Successfully", data: exerciseData })
@@ -170,6 +190,24 @@ app.post('/api/workout/add-exercise', async (req: Request, res: Response) => {
     console.error(err);
 
     return res.status(500).json({ message: "Failed To Add Exercise", error: err })
+  }
+})
+
+app.post('/api/workout/remove-exercise', async (req: Request, res: Response) => {
+  try {
+    const { workoutId, exerciseId } = req.body;
+    const exerciseData = await prisma.workoutExercise.delete({
+      where: {
+        workoutId_exerciseId:{workoutId:workoutId,
+        exerciseId: Number(exerciseId),
+      }}
+    });
+    return res.status(200).json({ message: "Exercise Deleted Successfully", data: exerciseData })
+  }
+  catch (err) {
+    console.error(err);
+
+    return res.status(500).json({ message: "Failed To Delete Exercise", error: err })
   }
 })
 
@@ -188,7 +226,6 @@ app.get('/api/workout/exercises', async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Failed To Fetch Exercises!", error: err });
   }
 })
-
 
 
 app.listen(3000);

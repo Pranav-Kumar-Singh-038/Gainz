@@ -2,6 +2,24 @@
 
 A workout tracking app (clone of Hevy) built with a React + Vite frontend and an Express + Prisma backend.
 
+## Features
+
+- Workout logging
+- Exercise search and selection
+- Workout creation flow
+
+## Features To Implement
+
+- Weights tracking
+- Editable workout details:
+  - sets
+  - reps
+  - rest time
+  - weights
+- Improved exercise search
+- Search on `Enter` key press
+- Edit exercise details
+
 ## Tech Stack
 
 **Frontend** (`client/`)
