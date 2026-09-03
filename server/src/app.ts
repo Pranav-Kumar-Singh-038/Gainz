@@ -1,10 +1,11 @@
 import express, { type Express, type Request, type Response } from 'express';
 import { prisma } from "./lib/prisma.ts";
 import { Prisma } from "../generated/prisma/client.ts"
+import cors from 'cors';
 
 const app: Express = express();
 app.use(express.json());
-
+app.use(cors());
 app.get('/api/health-check', (req: Request, res: Response) => {
   res.send('Server is Healthy');
 });
@@ -228,4 +229,4 @@ app.get('/api/workout/exercises', async (req: Request, res: Response) => {
 })
 
 
-app.listen(3000);
+app.listen( process.env.PORT || 3000);

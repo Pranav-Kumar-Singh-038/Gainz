@@ -2,6 +2,8 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import type { Workout } from './CreateWorkout';
 import type { Exercise } from './Exercises';
+import {api} from '../lib/api.ts';
+
 type WorkoutExercise =
     {
         workoutId: number,
@@ -25,7 +27,7 @@ function WorkoutExercises() {
     async function removeExerciseFromWorkout(exerciseId: number | string) {
         try {
             const workoutIdNumber = Number(workoutId);
-            const response = await fetch('/api/workout/remove-exercise', {
+            const response = await api('/api/workout/remove-exercise', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -50,7 +52,7 @@ function WorkoutExercises() {
     async function addExerciseToWorkout(exerciseId: number | string) {
         try {
             const workoutIdNumber = Number(workoutId);
-            const response = await fetch('/api/workout/add-exercise', {
+            const response = await api('/api/workout/add-exercise', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -82,7 +84,7 @@ function WorkoutExercises() {
                 if (!workoutId) {
                     throw new Error("workoutId not found in Params");
                 }
-                const response = await fetch(`/api/workout/exercises?workoutId=${workoutId}`);
+                const response = await api(`/api/workout/exercises?workoutId=${workoutId}`);
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.message || "Failed To Get Exercises");
@@ -101,7 +103,7 @@ function WorkoutExercises() {
 
     async function searchExercises() {
         try {
-            const searchResponse = await fetch(`/api/exercises?searchTerm=${searchTerm}`);
+            const searchResponse = await api(`/api/exercises?searchTerm=${searchTerm}`);
             if (!searchResponse.ok) {
                 const errorData = await searchResponse.json();
                 throw new Error(errorData.message || "Error Fetching Exercises")

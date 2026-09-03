@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import {api} from '../lib/api.ts';
 
 export type Exercise = {
     id: number,
@@ -13,7 +14,7 @@ function Exercises() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch("/api/exercises").then((res) => {
+        api("/api/exercises").then((res) => {
             if (!res.ok) {
                 throw new Error(`Failed: ${res.status}`);
             }

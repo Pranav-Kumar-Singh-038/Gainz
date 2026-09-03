@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {api} from '../lib/api.ts';
 
 function Signup() {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ function Signup() {
 
     async function submitUserDetails() {
         try {
-            const response = await fetch('/api/signup', {
+            const response = await api('/api/signup', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: email, password: password })

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {api} from '../lib/api.ts';
 
 export type Workout =
     {
@@ -16,7 +17,7 @@ function CreateWorkout() {
 
     async function deleteWorkout(workoutId: number) {
         try {
-            const response = await fetch('/api/remove-workout', {
+            const response = await api('/api/remove-workout', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ workoutId: workoutId })
@@ -45,7 +46,7 @@ function CreateWorkout() {
                     throw new Error("userId not found in localStorage");
                 }
                 const userId = parseInt(userIdString);
-                const response = await fetch(`/api/workouts?userId=${userId}`);
+                const response = await api(`/api/workouts?userId=${userId}`);
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.message || "Failed To Get Workouts");
@@ -69,7 +70,7 @@ function CreateWorkout() {
                 throw new Error("userId not found in localStorage");
             }
             const userId = parseInt(userIdString);
-            const response = await fetch('/api/add-workout', {
+            const response = await api('/api/add-workout', {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({ userId: userId, name: workoutName })

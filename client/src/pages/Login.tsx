@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom'
+import {api} from '../lib/api.ts';
 
 function Login({ setLoggedIn }: { setLoggedIn: (value: boolean) => void })
 {
@@ -22,7 +23,7 @@ function Login({ setLoggedIn }: { setLoggedIn: (value: boolean) => void })
     {
         try
         {
-            const response = await fetch('/api/login',{
+            const response = await api('/api/login',{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({email:email, password:password})
