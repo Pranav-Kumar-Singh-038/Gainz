@@ -1,30 +1,30 @@
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar.tsx'
 
-function Dashboard({setLoggedIn}:{setLoggedIn:(value:boolean)=>void}) {
+function Dashboard({ setLoggedIn }: { setLoggedIn: (value: boolean) => void }) {
     const navigate = useNavigate();
 
-    function navigateToCreateWorkout()
-    {
+    function navigateToCreateWorkout() {
         navigate('/create-workout');
     }
 
-    function performLogout()
-    {
+    function performLogout() {
         localStorage.removeItem('userId');
         alert('Logout Successful');
         navigate('/login');
         setLoggedIn(false);
     }
 
-    function navigateToExercises() {
-        navigate('/exercises')
-    }
+
     return (
         <>
-            <h1>Dashboard</h1>
-            <button onClick={navigateToExercises}>Exercises</button>
-            <button onClick={navigateToCreateWorkout}>Create Workout</button>
-            <button onClick={performLogout}>Logout</button>
+            <div className="flex h-screen">
+                <Navbar></Navbar>
+                <h1>Dashboard</h1>
+                <button onClick={navigateToCreateWorkout}>Create Workout</button>
+                <button onClick={performLogout}>Logout</button>
+            </div>
+
         </>
 
     )
