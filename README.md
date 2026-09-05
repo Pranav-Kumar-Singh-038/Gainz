@@ -37,7 +37,6 @@ Deployment setup:
 
 ## Features To Implement
 
-- Weights tracking
 - Editable workout details:
   - sets
   - reps
@@ -46,6 +45,12 @@ Deployment setup:
 - Improved exercise search
 - Search on `Enter` key press
 - Edit exercise details
+- Button press feedback: buttons currently show no visible effect when pressed — add active/pressed states so taps feel responsive
+- Search results UX: show a "no results found" message for empty searches, and show the number of items found at the top of the results list
+- Exercise alternate names: many exercises need aliases/alternate names (e.g. "narrow stance squats") so search finds them regardless of which variation name the user types
+- Exercise card CSS: display image, instructions, and name properly (layout is currently unstyled)
+- Edit exercise detail after adding: allow changing sets/reps/rest of an exercise already added to a workout
+- Separate place to start a workout: a dedicated workout session view ( distinct from the create/edit flow) for actually performing a workout
 
 ## Tech Stack
 

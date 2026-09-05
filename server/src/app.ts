@@ -172,14 +172,15 @@ app.get('/api/workouts', async (req: Request, res: Response) => {
 
 app.post('/api/workout/add-exercise', async (req: Request, res: Response) => {
   try {
-    const { workoutId, exerciseId, sets, reps, rest } = req.body;
+    const { workoutId, exerciseId, sets, reps, rest, weight } = req.body;
     const exerciseData = await prisma.workoutExercise.create({
       data: {
         workoutId,
         exerciseId: Number(exerciseId),
         sets: sets ?? 3,
         reps: reps ?? 12,
-        rest: rest ?? 120
+        rest: rest ?? 120,
+        weight: weight ?? 0
       },
       include:{
         exercise:true

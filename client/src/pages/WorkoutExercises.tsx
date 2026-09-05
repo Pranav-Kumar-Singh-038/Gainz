@@ -2,7 +2,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import type { Workout } from './CreateWorkout';
 import type { Exercise } from './Exercises';
-import {api} from '../lib/api.ts';
+import { api } from '../lib/api.ts';
 
 type WorkoutExercise =
     {
@@ -11,10 +11,12 @@ type WorkoutExercise =
         sets: number,
         reps: number,
         rest: number,
+        weight: number,
         exercise: Exercise
     }
 function WorkoutExercises() {
     const [sets, setSets] = useState<number>(0);
+    const [weight, setWeight] = useState<number>(0);
     const [reps, setReps] = useState<number>(0);
     const [rest, setRest] = useState<number>(0);
     const [exercises, setExercises] = useState<WorkoutExercise[]>([]);
@@ -41,7 +43,7 @@ function WorkoutExercises() {
             }
             setExercises(exercises.filter(e =>
                 !(e.workoutId === Number(workoutId) && e.exerciseId === exerciseId)
-            ))            
+            ))
             alert(`Exercise Removed SuccessFully`)
         }
         catch (err) {
@@ -60,7 +62,8 @@ function WorkoutExercises() {
                     exerciseId: exerciseId,
                     sets: sets,
                     reps: reps,
-                    rest: rest
+                    rest: rest,
+                    weight: weight
                 })
             })
             if (!response.ok) {
@@ -143,6 +146,7 @@ function WorkoutExercises() {
                         {<input placeholder="Sets" onChange={(e) => { setSets(parseInt(e.target.value, 10)) }}></input>}
                         {<input placeholder="Reps" onChange={(e) => { setReps(parseInt(e.target.value, 10)) }}></input>}
                         {<input placeholder="Rest Time (in seconds)" onChange={(e) => { setRest(parseInt(e.target.value, 10)) }}></input>}
+                        {<input placeholder="Weight (in Kgs)" onChange={(e) => { setWeight(parseInt(e.target.value, 10)) }}></input>}
                         {<button onClick={() => addExerciseToWorkout(exercise.id)}>Add Exercise</button>}
 
                     </li>
