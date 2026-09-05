@@ -2,6 +2,33 @@
 
 A workout tracking app (clone of Hevy) built with a React + Vite frontend and an Express + Prisma backend.
 
+## Live Demo (dev deployment)
+
+Try the app here: **https://gainz-azure.vercel.app/**
+
+Deployment setup:
+- **Frontend** → Vercel (`dev` branch): https://gainz-azure.vercel.app/
+- **Backend API** → Render: `https://gainz-backenc.onrender.com`
+- **Database** → Neon (PostgreSQL)
+
+> Note: the backend runs on Render's free tier, so the first API call after a period of inactivity can take ~30–60s (cold start). If the app seems stuck on first load, wait a moment and retry.
+
+## How To Use
+
+1. **Sign up:** Open the demo link. You'll land on the Signup page — enter an email and password, then hit Submit.
+2. **Log in:** After signup you'll be sent to the Login page. Log in with the same credentials. (Your session is kept via `userId` in browser localStorage.)
+3. **Dashboard:** After login you get three options:
+   - **Exercises** — browse the full exercise catalog (800+ exercises with instructions and images).
+   - **Create Workout** — manage your workouts.
+   - **Logout** — ends your session.
+4. **Create a workout:** On the Create Workout page, type a name (e.g. "Push Day") and hit Create. Your workouts are listed below, each with:
+   - **Modify Workout** — opens that workout's exercise list.
+   - **Delete Workout** — removes the workout.
+5. **Add exercises to a workout:** On a workout's page (`/workout/:id/exercises`):
+   - The top list shows exercises already in the workout (name, sets, reps, rest time), each removable via **Remove Exercise**.
+   - Under **Add Exercises**, type a name in the Search box and hit **Search** to find exercises from the catalog.
+   - For a result, optionally set **Sets**, **Reps**, and **Rest Time (seconds)** (defaults: 3 sets, 12 reps, 120s), then hit **Add Exercise**.
+
 ## Features
 
 - Workout logging
