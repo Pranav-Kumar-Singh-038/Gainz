@@ -44,14 +44,14 @@ app.post('/api/add-exercise', async (req: Request, res: Response) => {
 
 app.get('/api/exercises', async (req: Request, res: Response) => {
   try {
-    const searchTerm =typeof req.query.searchTerm === 'string' ? req.query.searchTerm :undefined;
+    const searchTerm = typeof req.query.searchTerm === 'string' ? req.query.searchTerm : undefined;
     const exercises = await prisma.exercise.findMany({
-      where:searchTerm ? {
-        name:{
-          contains:searchTerm,
+      where: searchTerm ? {
+        name: {
+          contains: searchTerm,
           mode: 'insensitive'
         }
-      }:undefined
+      } : undefined
     });
     return res.status(200).json({ message: "Exercises Fetched!", data: exercises });
   }
@@ -145,7 +145,7 @@ app.post('/api/remove-workout', async (req: Request, res: Response) => {
     const { workoutId } = req.body;
     const workoutData = await prisma.workout.delete({
       where: {
-        id:workoutId
+        id: workoutId
       }
     });
     return res.status(200).json({ message: "Workout Removed Successfully", data: workoutData })
@@ -182,8 +182,8 @@ app.post('/api/workout/add-exercise', async (req: Request, res: Response) => {
         rest: rest ?? 120,
         weight: weight ?? 0
       },
-      include:{
-        exercise:true
+      include: {
+        exercise: true
       }
     });
     return res.status(200).json({ message: "Exercise Added Successfully", data: exerciseData })
@@ -200,9 +200,11 @@ app.post('/api/workout/remove-exercise', async (req: Request, res: Response) => 
     const { workoutId, exerciseId } = req.body;
     const exerciseData = await prisma.workoutExercise.delete({
       where: {
-        workoutId_exerciseId:{workoutId:workoutId,
-        exerciseId: Number(exerciseId),
-      }}
+        workoutId_exerciseId: {
+          workoutId: workoutId,
+          exerciseId: Number(exerciseId),
+        }
+      }
     });
     return res.status(200).json({ message: "Exercise Deleted Successfully", data: exerciseData })
   }
@@ -229,5 +231,40 @@ app.get('/api/workout/exercises', async (req: Request, res: Response) => {
   }
 })
 
+app.post('/api/create-routine', async (req: Request, res: Response) => {
+  try {
+    const { name, userId } = req.body;
+    const routineData = await prisma.routine.create({
+      data: {
+        name: name,
+        userId: Number(userId)
+      }
+    });
+    return res.status(200).json({ message: "Routine Created Successfully", data: routineData })
+  }
+  catch (err) {
+    console.error(err);
 
-app.listen( process.env.PORT || 3000);
+    return res.status(500).json({ message: "Failed To Create Routine", error: err })
+  }
+})
+
+app.get('/api/routines', async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.query.userId);
+    const routineData = await prisma.routine.findMany({
+      where: { userId }
+    });
+
+    return res.status(200).json({ message: "Routines Fetched Successfully", data: routineData })
+  }
+  catch (err) {
+    console.error(err);
+
+    return res.status(500).json({ message: "Failed To Create Routine", error: err })
+  }
+})
+
+
+
+app.listen(process.env.PORT || 3000);

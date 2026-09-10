@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import Login from './pages/Login';
 import CreateWorkout from './pages/CreateWorkout'
 import WorkoutExercises from './pages/WorkoutExercises'
+import Routines from './pages/Routines'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(
@@ -29,6 +30,7 @@ function App() {
 
         <Route path="/login" element={<Login setLoggedIn={setLoggedIn}/>} />
         <Route path="/exercises" element={<Exercises />} />
+        <Route path="/routines" element={<Routines />} />
         <Route path="/create-workout" element={<CreateWorkout/>}></Route>
         <Route path="/workout/:workoutId/exercises" element={<WorkoutExercises/>}></Route>
       </Routes>

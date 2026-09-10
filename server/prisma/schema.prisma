@@ -12,6 +12,7 @@ model User {                  // e.g. Pranav
   email           String    @unique
   password        String    
   workouts        Workout[]
+  routines        Routine[]
 }
 
 enum  MuscleRole{
@@ -45,8 +46,8 @@ model ExerciseMuscle {
   exerciseId    Int
   muscleId      Int 
   role          MuscleRole
-  exercise      Exercise  @relation(fields:[exerciseId],references:id, onDelete: Cascade)
-  muscle        Muscle    @relation(fields:[muscleId],references:id,onDelete:Cascade)
+  exercise      Exercise  @relation(fields:[exerciseId],references:[id], onDelete: Cascade)
+  muscle        Muscle    @relation(fields:[muscleId],references:[id],onDelete:Cascade)
 
   @@id([exerciseId, muscleId])
   @@index([muscleId])  
@@ -62,6 +63,7 @@ model Workout {
   updatedAt    DateTime         @updatedAt
 
   exercises    WorkoutExercise[]
+  routine      RoutineWorkout[]
 
   @@index([userId])
 }
@@ -80,3 +82,29 @@ model WorkoutExercise{
 
   @@id([workoutId,exerciseId])
 }
+
+model Routine {
+  id          Int             @id @default(autoincrement())
+  name        String
+  userId      Int
+  user        User            @relation(fields:[userId], references:[id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  workouts    RoutineWorkout[]
+  @@index([userId])
+}
+
+model RoutineWorkout {
+  id                 Int        @id @default(autoincrement())
+  routineId          Int
+  workoutId          Int
+  order              Int
+
+  routine            Routine    @relation(fields:[routineId], references:[id], onDelete:Cascade)
+  workout            Workout    @relation(fields:[workoutId], references:[id], onDelete:Cascade)
+  
+  @@unique([routineId,order])
+  @@index([routineId])
+  @@index([workoutId])
+}
+
