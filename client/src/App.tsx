@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import CreateWorkout from './pages/CreateWorkout'
 import WorkoutExercises from './pages/WorkoutExercises'
 import Routines from './pages/Routines'
-
+import Layout from './components/Layout';
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(
     localStorage.getItem("userId") !== null
@@ -16,23 +16,25 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {loggedIn ?
-          (<Route path="/" element={<Dashboard setLoggedIn={setLoggedIn} />} />) :
-          (
-            <>
-              <Route path="/signup" element={<Signup />} />
-              <Route
-                path="/"
-                element={<Navigate to="/signup" replace />}
-              />
-            </>
-          )}
+        <Route element={<Layout />}>
+          {loggedIn ?
+            (<Route path="/" element={<Dashboard setLoggedIn={setLoggedIn} />} />) :
+            (
+              <>
+                <Route path="/signup" element={<Signup />} />
+                <Route
+                  path="/"
+                  element={<Navigate to="/signup" replace />}
+                />
+              </>
+            )}
 
-        <Route path="/login" element={<Login setLoggedIn={setLoggedIn}/>} />
-        <Route path="/exercises" element={<Exercises />} />
-        <Route path="/routines" element={<Routines />} />
-        <Route path="/create-workout" element={<CreateWorkout/>}></Route>
-        <Route path="/workout/:workoutId/exercises" element={<WorkoutExercises/>}></Route>
+          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
+          <Route path="/exercises" element={<Exercises />} />
+          <Route path="/routines" element={<Routines />} />
+          <Route path="/create-workout" element={<CreateWorkout />}></Route>
+          <Route path="/workout/:workoutId/exercises" element={<WorkoutExercises />}></Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   )
