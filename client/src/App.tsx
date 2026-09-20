@@ -8,6 +8,8 @@ import CreateWorkout from './pages/CreateWorkout'
 import WorkoutExercises from './pages/WorkoutExercises'
 import Routines from './pages/Routines'
 import Layout from './components/Layout';
+import Routine from './pages/Routine';
+import CreateRoutine from './pages/CreateRoutine';
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(
     localStorage.getItem("userId") !== null
@@ -33,7 +35,9 @@ function App() {
           <Route path="/exercises" element={<Exercises />} />
           <Route path="/routines" element={<Routines />} />
           <Route path="/create-workout" element={<CreateWorkout />}></Route>
+          <Route path="/create-routine" element={<CreateRoutine />}></Route>
           <Route path="/workout/:workoutId/exercises" element={<WorkoutExercises />}></Route>
+          <Route path="/routine/:routineId" element={<Routine />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

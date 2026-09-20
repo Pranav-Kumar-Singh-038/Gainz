@@ -22,7 +22,7 @@ function Navbar() {
         return null;
     }
     return (
-        <div className="h-full w-1/4 bg-zinc-900 flex-col justify-center p-3">
+        <div className="absolute inset-y-0  left-0 z-20 h-full w-1/4 bg-zinc-900 flex flex-col justify-start p-3">
             <div className="flex items-center pt-3">
                 <img src="/Gainz_Logo.svg" className="size-12"></img>
                 <div className="text-white tracking-widest text-2xl font-extrabold">GAINZ</div>

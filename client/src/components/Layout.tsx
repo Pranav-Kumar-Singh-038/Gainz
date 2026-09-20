@@ -13,10 +13,10 @@ function Layout() {
     }
 
     return (
-        <div className='flex h-screen'>
+        <div className='relative flex h-screen overflow-hidden'>
             <Navbar></Navbar>
             <main className='flex-1 overflow-auto'>
-                <div className="h-14 bg-zinc-800 flex items-center px-3" onClick={openNavbar}>
+                <div className="h-17 bg-zinc-800 flex items-center px-3" onClick={openNavbar}>
                     {!visible && <Menu className='text-gray-300'></Menu>}
                 </div>
                 <Outlet></Outlet>
