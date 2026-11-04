@@ -1,6 +1,6 @@
-# Hevy Clone
+# Gainz
 
-A workout tracking app (clone of Hevy) built with a React + Vite frontend and an Express + Prisma backend.
+A workout tracking app built with a React + Vite frontend and an Express + Prisma backend.
 
 ## Features
 
@@ -37,7 +37,7 @@ A workout tracking app (clone of Hevy) built with a React + Vite frontend and an
 ## Project Structure
 
 ```
-hevy-clone/
+Gainz/
 ├── client/              # React frontend
 │   └── src/
 │       ├── App.tsx      # Root component (fetches exercises)
@@ -64,7 +64,7 @@ hevy-clone/
 
    ```bash
    git clone <repo-url>
-   cd hevy-clone
+   cd Gainz
    ```
 
 2. **Backend setup:**
